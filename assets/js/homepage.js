@@ -85,8 +85,10 @@ var displayRepos = function(repos, searchTerm) {
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
         // create a container for each repo
-        var repoEl = document.createElement("div");
+        var repoEl = document.createElement("a");
         repoEl.classList = "list-item flex-row justify-space-between align-center";
+        // this will allow a user to click on a repo to view eahc issue. We appended query parameter (?repo= + repoName) to the end of the href so that upon click, user is taken to single-repohtml page and the page will display issues from whatever user they searched for since we used the repoName variable. 
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
         // create a span element to hold repository name
         var titleEl = document.createElement("span");
@@ -117,3 +119,4 @@ var displayRepos = function(repos, searchTerm) {
 };
 
 userFormEl.addEventListener("submit", formSubmitHandler); 
+

@@ -1,8 +1,39 @@
+// get reference to span that contains repo name
 var repoNameEl = document.querySelector("#repo-name");
 // get reference to issue container
 var issueContainerEl = document.querySelector("#issues-container");
 // get reference to limit-warning container
 var limitWarningEl = document.querySelector("#limit-warning");
+
+// get repo name function will 
+var getRepoName = function() {
+
+  // check for valid values, in the case that the function couldn's retrieve the corect query parameter. If repoName is valid (or exists), the value will be fed to the fetch call
+  if(repoName) {
+
+    // call getRepoIssues function and pass in the info form the repoName variable to fetch related issues form the GitHub api issues endpoint
+    getRepoIssues(repoName);
+
+    // to display repository name to the top of the page, do the following...
+    repoNameEl.textContent = repoName; 
+
+    // if repoName doesn't exists or is invalid, then do the following 
+  } else {
+
+    // redirect user back to the homepage (index.html) if no repo was given
+    document.location.replace("./index.html")
+
+  };
+
+
+  // extract the repo name from the query string using the split method
+  var queryString = document.location.search;
+
+  // isolate the needed repoName by splitting query string at = . Now that this has made the info a string, identify the position of the string you want that holds the necessary info
+  var repoName = queryString.split("=")[1];
+
+
+};
 
 // create function to get repository issues from searched user
 var getRepoIssues = function(repo) {
@@ -25,8 +56,9 @@ var getRepoIssues = function(repo) {
     }
     // request was unsuccessful
     else {
-      console.log(response);
-      alert("There was a problem with your request!");
+      
+      document.location.replace("./index.html")
+
     }
   });
 };
@@ -60,11 +92,16 @@ var displayIssues = function(issues) {
 
     // check if issue is an actual issue or a pull request
     if (issues[i].pull_request) {
+      
       typeEl.textContent = "(Pull request)";
+
     }
     else {
+      
+      // if not successful, do the following (redirect to the hompeage)
       typeEl.textContent = "(Issue)";
-    }
+
+    };
 
     // append to container
     issueEl.appendChild(typeEl);
@@ -89,4 +126,4 @@ var displayWarning = function(repo) {
   limitWarningEl.appendChild(linkEl);
 };
 
-getRepoIssues("facebook/react");
+getRepoName();
