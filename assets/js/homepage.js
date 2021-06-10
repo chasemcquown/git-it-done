@@ -1,3 +1,6 @@
+// reference to button elements (using parent div that is containg them to identify them)
+var languageButtonsEl = document.querySelector("#language-buttons")
+
 // reference to form element
 var userFormEl = document.querySelector("#user-form");
 
@@ -62,6 +65,30 @@ var getUserRepos = function(user) {
   
 };
 
+// create a function to get featured repos. Pass in language as a parameter to identify language
+var getFeaturedRepos = function(language) {
+  
+    // identify language that user wants to display issues for, then find which issues are listed as help wanted issues
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+  
+    // pass apiUrl into the fetch function call below
+    fetch(apiUrl)
+    // then do something with that repsonse
+    .then(function(response) {
+        //check for successful response
+        if (response.ok) {
+            // do this if successful. Extratc the json (javascript object notation) from the response, then call display repos and pass in data.items and language
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            });
+        // do this if unsusccessful     
+        } else {
+            alert("Error: GitHub user not found");
+        }
+    })
+  
+  };
+
 // create function to display repositories to the webpage. The function will receive the array of repo data as well as the term that was searched for. Both are passed into the function as parameters. 
 var displayRepos = function(repos, searchTerm) {
 
@@ -118,5 +145,29 @@ var displayRepos = function(repos, searchTerm) {
     };
 };
 
+
 userFormEl.addEventListener("submit", formSubmitHandler); 
+
+// create function to handle button click. MUST BE ABOVE THE EVENT LISTENER
+var buttonClickHandler = function(event) {
+
+    // create a new variable that IDENTIFIES WHICH BUTTON WAS CLICKED ON WITHIN THE PARENT DIV CONTAINING THE BUTTONS. event.target.getAttribute("data-language") will identify which button was clicked
+    var language = event.target.getAttribute("data-language");
+    
+    // check if language exists. It will exist if 1 of the 3 language buttons has been clicked
+    if (language) {
+        
+        // if language exists, call getFeaturedRepos function and pass in language
+        getFeaturedRepos(language);
+
+        // clear out old content
+        repoContainerEl.textContent = "";
+        
+    };
+    
+
+};
+
+// add event listener to div element that you identified at the top of this js file. Call buttonClickHandler to do something once button is clicked
+languageButtonsEl.addEventListener("click", buttonClickHandler);
 

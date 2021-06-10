@@ -63,6 +63,7 @@ var getRepoIssues = function(repo) {
   });
 };
 
+
 // function for displaying the issues to the webpage
 var displayIssues = function(issues) {
   // check if there are no existing issues within a repository
@@ -127,3 +128,19 @@ var displayWarning = function(repo) {
 };
 
 getRepoName();
+
+
+// IGNORE
+
+// Notes
+
+// Below is an example of using multiple parameters
+// https://api.github.com/search/repositories?q=javascript+is:featured&sort=stars
+// The +is:featured parameter  tells the API that we only want featured repositories
+// To specify where one parameter ends and another begins, use the & symbol
+
+// Structure for the API will look as follows
+// q=SEARCH_KEYWORD_1+SEARCH_KEYWORD_N+QUALIFIER_1+QUALIFIER_N
+// A real example of this would look like the following code:
+// q=javascript+html+css+is:featured
+// In this case, the N keyword would be css and the N qualifier would be is:featured, because they are the last of each set of data, respectively.
